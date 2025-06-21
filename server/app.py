@@ -1,3 +1,10 @@
+import os
+import sys
+
+# Add the parent directory to sys.path if running directly
+if __name__ == '__main__':
+    sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+
 from server import create_app
 from server.models import db, Episode, Guest, Appearance
 
