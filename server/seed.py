@@ -11,6 +11,8 @@ import csv
 app = create_app()
 
 with app.app_context():
+    # Drop and recreate all tables to reset IDs
+    db.drop_all()
     db.create_all()
 
     # Use the correct path for seed.csv within the server directory
@@ -38,15 +40,15 @@ with app.app_context():
 
         db.session.commit()
 
-        # Optional: Seed Appearances (simplified, assuming each guest appears in the episode of their row)
-        for row in reader:  # Reset reader to start
-            csvfile.seek(0)
-            next(reader)  # Skip header
+        # Seed Appearances
+        csvfile.seek(0)
+        next(reader)  # Skip header
+        for row in reader:
             if row['Raw_Guest_List'] and row['Show']:
                 guest = guests.get(row['Raw_Guest_List'])
                 episode = episodes.get(row['Show'])
                 if guest and episode and not Appearance.query.filter_by(guest_id=guest.id, episode_id=episode.id).first():
-                    appearance = Appearance(rating=3, episode_id=episode.id, guest_id=guest.id)  # Default rating of 3
+                    appearance = Appearance(rating=3, episode_id=episode.id, guest_id=guest.id)
                     db.session.add(appearance)
 
         db.session.commit()
