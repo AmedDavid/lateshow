@@ -51,7 +51,6 @@ class Appearance(db.Model):
             'rating': self.rating,
             'episode_id': self.episode_id,
             'guest_id': self.guest_id
-            # Remove episode and guest to_dict() calls to break recursion
         }
 
     @classmethod
