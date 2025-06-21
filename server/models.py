@@ -14,7 +14,7 @@ class Episode(db.Model):
             'id': self.id,
             'date': self.date,
             'number': self.number,
-            'appearances': [appearance.to_dict() for appearance in self.appearances]
+            'appearance_ids': [appearance.id for appearance in self.appearances]  # Only include appearance IDs
         }
 
 class Guest(db.Model):
@@ -30,7 +30,8 @@ class Guest(db.Model):
         return {
             'id': self.id,
             'name': self.name,
-            'occupation': self.occupation
+            'occupation': self.occupation,
+            'appearance_ids': [appearance.id for appearance in self.appearances]  # Only include appearance IDs
         }
 
 class Appearance(db.Model):
@@ -49,9 +50,8 @@ class Appearance(db.Model):
             'id': self.id,
             'rating': self.rating,
             'episode_id': self.episode_id,
-            'guest_id': self.guest_id,
-            'episode': self.episode.to_dict() if self.episode else None,
-            'guest': self.guest.to_dict() if self.guest else None
+            'guest_id': self.guest_id
+            # Remove episode and guest to_dict() calls to break recursion
         }
 
     @classmethod
